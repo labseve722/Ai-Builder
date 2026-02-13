@@ -16,7 +16,7 @@ function MessageBubble({ message }: { message: Message }) {
           max-w-[80%] rounded-2xl px-5 py-3
           ${
             isUser
-              ? 'bg-indigo-600 text-white'
+              ? 'bg-blue-600 text-white'
               : isSystemPlan
               ? 'bg-blue-500/10 border border-blue-500/30 text-blue-200'
               : isProgress
@@ -80,31 +80,31 @@ export function Chat() {
     const userMessage = input.trim();
     setInput('');
 
-    addMessage({
+    await addMessage({
       role: 'user',
       content: userMessage,
     });
 
     setIsGenerating(true);
 
-    setTimeout(() => {
-      addMessage({
+    setTimeout(async () => {
+      await addMessage({
         role: 'system',
         content: 'I understand you want to: ' + userMessage + '\n\nLet me create a plan for that.',
         type: 'plan',
       });
     }, 500);
 
-    setTimeout(() => {
-      addMessage({
+    setTimeout(async () => {
+      await addMessage({
         role: 'system',
         content: 'Working on implementing the requested features...',
         type: 'progress',
       });
     }, 1500);
 
-    setTimeout(() => {
-      addMessage({
+    setTimeout(async () => {
+      await addMessage({
         role: 'system',
         content: 'Successfully updated:\n- Modified 3 components\n- Added new styles\n- Updated configuration',
         type: 'changes',
@@ -130,7 +130,7 @@ export function Chat() {
           {isGenerating && (
             <div className="flex justify-start mb-4">
               <div className="bg-gray-800 rounded-2xl px-5 py-3">
-                <Loader2 className="w-5 h-5 text-indigo-400 animate-spin" />
+                <Loader2 className="w-5 h-5 text-blue-400 animate-spin" />
               </div>
             </div>
           )}
@@ -147,14 +147,14 @@ export function Chat() {
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={handleKeyDown}
               placeholder="Describe what you want to build..."
-              className="w-full bg-gray-800 text-gray-100 rounded-2xl px-5 py-4 pr-14 resize-none focus:outline-none focus:ring-2 focus:ring-indigo-500 placeholder-gray-500"
+              className="w-full bg-gray-800 text-gray-100 rounded-2xl px-5 py-4 pr-14 resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-gray-500"
               rows={3}
               disabled={isGenerating}
             />
             <button
               type="submit"
               disabled={!input.trim() || isGenerating}
-              className="absolute bottom-4 right-4 p-2.5 bg-indigo-600 hover:bg-indigo-700 disabled:bg-gray-700 disabled:cursor-not-allowed text-white rounded-xl transition-colors"
+              className="absolute bottom-4 right-4 p-2.5 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-700 disabled:cursor-not-allowed text-white rounded-xl transition-colors"
             >
               <Send className="w-5 h-5" />
             </button>

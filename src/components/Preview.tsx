@@ -43,7 +43,7 @@ export function Preview() {
                   flex items-center gap-2 px-4 py-2 rounded-lg transition-colors
                   ${
                     viewportMode === mode
-                      ? 'bg-indigo-600 text-white'
+                      ? 'bg-blue-600 text-white'
                       : 'bg-gray-800 text-gray-400 hover:bg-gray-700 hover:text-gray-200'
                   }
                 `}

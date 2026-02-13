@@ -22,7 +22,7 @@ export function Sidebar() {
             w-14 h-14 rounded-xl flex flex-col items-center justify-center gap-1 transition-all
             ${
               currentSection === id
-                ? 'bg-indigo-600 text-white'
+                ? 'bg-blue-600 text-white'
                 : 'text-gray-400 hover:bg-gray-800 hover:text-gray-200'
             }
           `}

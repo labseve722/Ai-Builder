@@ -5,9 +5,10 @@ import { Chat } from './components/Chat';
 import { DesignTool } from './components/DesignTool';
 import { Preview } from './components/Preview';
 import { CodeEditor } from './components/CodeEditor';
+import { Loader2 } from 'lucide-react';
 
 function App() {
-  const { currentSection } = useApp();
+  const { currentSection, isLoading } = useApp();
 
   const renderSection = () => {
     switch (currentSection) {
@@ -23,6 +24,17 @@ function App() {
         return <Chat />;
     }
   };
+
+  if (isLoading) {
+    return (
+      <div className="h-screen flex items-center justify-center bg-gray-950">
+        <div className="text-center">
+          <Loader2 className="w-12 h-12 text-blue-400 animate-spin mx-auto mb-4" />
+          <p className="text-gray-400 text-sm">Loading your project...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="h-screen flex flex-col bg-gray-950 overflow-hidden">

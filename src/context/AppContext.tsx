@@ -1,23 +1,31 @@
-import { createContext, useContext, useState, ReactNode } from 'react';
+import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { Section, Message, FileNode, DesignElement, ViewportMode } from '../types';
+import { createProject, getProject, updateProject, Project } from '../services/projectService';
+import { createMessage, getMessages } from '../services/messageService';
+import { getFiles, updateFile, initializeDefaultFiles } from '../services/fileService';
+import { getDesignElements, saveDesignElements, initializeDefaultDesign } from '../services/designService';
 
 interface AppContextType {
   currentSection: Section;
   setCurrentSection: (section: Section) => void;
   messages: Message[];
-  addMessage: (message: Omit<Message, 'id' | 'timestamp'>) => void;
+  addMessage: (message: Omit<Message, 'id' | 'timestamp'>) => Promise<void>;
   files: FileNode[];
   setFiles: (files: FileNode[]) => void;
   selectedFile: FileNode | null;
   setSelectedFile: (file: FileNode | null) => void;
+  updateFileContent: (fileId: string, content: string) => Promise<void>;
   designElements: DesignElement[];
   setDesignElements: (elements: DesignElement[]) => void;
+  saveDesign: () => Promise<void>;
   selectedElement: DesignElement | null;
   setSelectedElement: (element: DesignElement | null) => void;
   viewportMode: ViewportMode;
   setViewportMode: (mode: ViewportMode) => void;
   previewCode: string;
   setPreviewCode: (code: string) => void;
+  currentProject: Project | null;
+  isLoading: boolean;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -141,30 +149,99 @@ const initialDesignElements: DesignElement[] = [
 
 export function AppProvider({ children }: { children: ReactNode }) {
   const [currentSection, setCurrentSection] = useState<Section>('chat');
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      id: '1',
-      role: 'system',
-      content: 'Hello! I\'m your AI assistant. I can help you build amazing applications. What would you like to create today?',
-      timestamp: new Date(),
-      type: 'normal',
-    },
-  ]);
-  const [files, setFiles] = useState<FileNode[]>(initialFiles);
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [files, setFiles] = useState<FileNode[]>([]);
   const [selectedFile, setSelectedFile] = useState<FileNode | null>(null);
-  const [designElements, setDesignElements] = useState<DesignElement[]>(initialDesignElements);
+  const [designElements, setDesignElements] = useState<DesignElement[]>([]);
   const [selectedElement, setSelectedElement] = useState<DesignElement | null>(null);
   const [viewportMode, setViewportMode] = useState<ViewportMode>('desktop');
   const [previewCode, setPreviewCode] = useState<string>('');
+  const [currentProject, setCurrentProject] = useState<Project | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const addMessage = (message: Omit<Message, 'id' | 'timestamp'>) => {
-    const newMessage: Message = {
-      ...message,
-      id: Date.now().toString(),
-      timestamp: new Date(),
-    };
-    setMessages((prev) => [...prev, newMessage]);
+  useEffect(() => {
+    initializeProject();
+  }, []);
+
+  async function initializeProject() {
+    setIsLoading(true);
+
+    let projectId = localStorage.getItem('currentProjectId');
+    let project: Project | null = null;
+
+    if (projectId) {
+      project = await getProject(projectId);
+    }
+
+    if (!project) {
+      project = await createProject('Untitled Project');
+      if (project) {
+        localStorage.setItem('currentProjectId', project.id);
+        await initializeDefaultFiles(project.id);
+        await initializeDefaultDesign(project.id);
+
+        await createMessage(project.id, {
+          role: 'system',
+          content: 'Hello! I\'m your AI assistant. I can help you build amazing applications. What would you like to create today?',
+          type: 'normal',
+        });
+      }
+    }
+
+    if (project) {
+      setCurrentProject(project);
+      await loadProjectData(project.id);
+    }
+
+    setIsLoading(false);
+  }
+
+  async function loadProjectData(projectId: string) {
+    const [loadedMessages, loadedFiles, loadedDesign] = await Promise.all([
+      getMessages(projectId),
+      getFiles(projectId),
+      getDesignElements(projectId),
+    ]);
+
+    setMessages(loadedMessages);
+    setFiles(loadedFiles);
+    setDesignElements(loadedDesign);
+  }
+
+  const addMessage = async (message: Omit<Message, 'id' | 'timestamp'>) => {
+    if (!currentProject) return;
+
+    const newMessage = await createMessage(currentProject.id, message);
+    if (newMessage) {
+      setMessages((prev) => [...prev, newMessage]);
+    }
   };
+
+  const updateFileContent = async (fileId: string, content: string) => {
+    if (!currentProject) return;
+
+    const success = await updateFile(fileId, { content });
+    if (success) {
+      const updatedFiles = await getFiles(currentProject.id);
+      setFiles(updatedFiles);
+    }
+  };
+
+  const saveDesign = async () => {
+    if (!currentProject) return;
+
+    await saveDesignElements(currentProject.id, designElements);
+  };
+
+  useEffect(() => {
+    if (currentProject && designElements.length > 0) {
+      const timeoutId = setTimeout(() => {
+        saveDesign();
+      }, 1000);
+
+      return () => clearTimeout(timeoutId);
+    }
+  }, [designElements, currentProject]);
 
   return (
     <AppContext.Provider
@@ -177,14 +254,18 @@ export function AppProvider({ children }: { children: ReactNode }) {
         setFiles,
         selectedFile,
         setSelectedFile,
+        updateFileContent,
         designElements,
         setDesignElements,
+        saveDesign,
         selectedElement,
         setSelectedElement,
         viewportMode,
         setViewportMode,
         previewCode,
         setPreviewCode,
+        currentProject,
+        isLoading,
       }}
     >
       {children}

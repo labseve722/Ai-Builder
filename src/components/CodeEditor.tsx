@@ -72,12 +72,29 @@ function FileTreeItem({
 }
 
 export function CodeEditor() {
-  const { files, selectedFile, setSelectedFile } = useApp();
+  const { files, selectedFile, setSelectedFile, updateFileContent } = useApp();
   const [editedContent, setEditedContent] = useState('');
+  const [isSaving, setIsSaving] = useState(false);
+  const [hasChanges, setHasChanges] = useState(false);
 
   const handleSelectFile = (file: FileNode) => {
     setSelectedFile(file);
     setEditedContent(file.content || '');
+    setHasChanges(false);
+  };
+
+  const handleContentChange = (content: string) => {
+    setEditedContent(content);
+    setHasChanges(content !== (selectedFile?.content || ''));
+  };
+
+  const handleSave = async () => {
+    if (!selectedFile || !hasChanges) return;
+
+    setIsSaving(true);
+    await updateFileContent(selectedFile.id, editedContent);
+    setHasChanges(false);
+    setIsSaving(false);
   };
 
   return (
@@ -111,7 +128,7 @@ export function CodeEditor() {
             <div className="flex-1 overflow-hidden">
               <textarea
                 value={editedContent}
-                onChange={(e) => setEditedContent(e.target.value)}
+                onChange={(e) => handleContentChange(e.target.value)}
                 className="w-full h-full bg-gray-950 text-gray-100 font-mono text-sm p-4 resize-none focus:outline-none"
                 style={{
                   tabSize: 2,
@@ -126,10 +143,15 @@ export function CodeEditor() {
                 <span>Language: {selectedFile.language || 'plaintext'}</span>
                 <span>Lines: {editedContent.split('\n').length}</span>
                 <span>Characters: {editedContent.length}</span>
+                {hasChanges && <span className="text-yellow-400">• Unsaved changes</span>}
               </div>
 
-              <button className="px-3 py-1 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-medium rounded transition-colors">
-                Save Changes
+              <button
+                onClick={handleSave}
+                disabled={!hasChanges || isSaving}
+                className="px-3 py-1 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-700 disabled:cursor-not-allowed text-white text-xs font-medium rounded transition-colors"
+              >
+                {isSaving ? 'Saving...' : hasChanges ? 'Save Changes' : 'Saved'}
               </button>
             </div>
           </>

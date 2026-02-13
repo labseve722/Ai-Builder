@@ -21,7 +21,7 @@ function renderElement(
       style={element.styles}
       className={`
         transition-all cursor-pointer relative
-        ${isSelected ? 'ring-2 ring-indigo-500 ring-offset-2 ring-offset-gray-900' : 'hover:ring-1 hover:ring-gray-600'}
+        ${isSelected ? 'ring-2 ring-blue-500 ring-offset-2 ring-offset-gray-900' : 'hover:ring-1 hover:ring-gray-600'}
       `}
     >
       {element.content}
@@ -72,7 +72,7 @@ function PropertiesPanel({
               type="text"
               value={element.content || ''}
               onChange={(e) => onUpdate({ content: e.target.value })}
-              className="w-full bg-gray-800 text-white px-3 py-2 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full bg-gray-800 text-white px-3 py-2 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
         )}
@@ -92,7 +92,7 @@ function PropertiesPanel({
               type="text"
               value={element.styles.backgroundColor || ''}
               onChange={(e) => updateStyle('backgroundColor', e.target.value)}
-              className="flex-1 bg-gray-800 text-white px-3 py-2 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="flex-1 bg-gray-800 text-white px-3 py-2 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="#ffffff"
             />
           </div>
@@ -113,7 +113,7 @@ function PropertiesPanel({
               type="text"
               value={element.styles.color || ''}
               onChange={(e) => updateStyle('color', e.target.value)}
-              className="flex-1 bg-gray-800 text-white px-3 py-2 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="flex-1 bg-gray-800 text-white px-3 py-2 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="#000000"
             />
           </div>
@@ -127,7 +127,7 @@ function PropertiesPanel({
             type="text"
             value={element.styles.fontSize || ''}
             onChange={(e) => updateStyle('fontSize', e.target.value)}
-            className="w-full bg-gray-800 text-white px-3 py-2 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            className="w-full bg-gray-800 text-white px-3 py-2 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
             placeholder="16px"
           />
         </div>
@@ -139,7 +139,7 @@ function PropertiesPanel({
           <select
             value={element.styles.fontWeight || 'normal'}
             onChange={(e) => updateStyle('fontWeight', e.target.value)}
-            className="w-full bg-gray-800 text-white px-3 py-2 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            className="w-full bg-gray-800 text-white px-3 py-2 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
             <option value="normal">Normal</option>
             <option value="500">Medium</option>
@@ -156,7 +156,7 @@ function PropertiesPanel({
             type="text"
             value={element.styles.padding || ''}
             onChange={(e) => updateStyle('padding', e.target.value)}
-            className="w-full bg-gray-800 text-white px-3 py-2 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            className="w-full bg-gray-800 text-white px-3 py-2 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
             placeholder="8px or 8px 16px"
           />
         </div>
@@ -169,7 +169,7 @@ function PropertiesPanel({
             type="text"
             value={element.styles.margin || ''}
             onChange={(e) => updateStyle('margin', e.target.value)}
-            className="w-full bg-gray-800 text-white px-3 py-2 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            className="w-full bg-gray-800 text-white px-3 py-2 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
             placeholder="8px or 8px 16px"
           />
         </div>
@@ -182,7 +182,7 @@ function PropertiesPanel({
             type="text"
             value={element.styles.borderRadius || ''}
             onChange={(e) => updateStyle('borderRadius', e.target.value)}
-            className="w-full bg-gray-800 text-white px-3 py-2 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            className="w-full bg-gray-800 text-white px-3 py-2 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
             placeholder="8px"
           />
         </div>
@@ -196,7 +196,7 @@ function PropertiesPanel({
               <select
                 value={element.styles.display || 'block'}
                 onChange={(e) => updateStyle('display', e.target.value)}
-                className="w-full bg-gray-800 text-white px-3 py-2 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="w-full bg-gray-800 text-white px-3 py-2 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
                 <option value="block">Block</option>
                 <option value="flex">Flex</option>
@@ -214,7 +214,7 @@ function PropertiesPanel({
                   <select
                     value={element.styles.flexDirection || 'row'}
                     onChange={(e) => updateStyle('flexDirection', e.target.value)}
-                    className="w-full bg-gray-800 text-white px-3 py-2 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    className="w-full bg-gray-800 text-white px-3 py-2 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                   >
                     <option value="row">Row</option>
                     <option value="column">Column</option>
@@ -228,7 +228,7 @@ function PropertiesPanel({
                   <select
                     value={element.styles.justifyContent || 'flex-start'}
                     onChange={(e) => updateStyle('justifyContent', e.target.value)}
-                    className="w-full bg-gray-800 text-white px-3 py-2 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    className="w-full bg-gray-800 text-white px-3 py-2 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                   >
                     <option value="flex-start">Start</option>
                     <option value="center">Center</option>
@@ -245,7 +245,7 @@ function PropertiesPanel({
                   <select
                     value={element.styles.alignItems || 'stretch'}
                     onChange={(e) => updateStyle('alignItems', e.target.value)}
-                    className="w-full bg-gray-800 text-white px-3 py-2 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    className="w-full bg-gray-800 text-white px-3 py-2 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                   >
                     <option value="stretch">Stretch</option>
                     <option value="flex-start">Start</option>
@@ -266,7 +266,7 @@ function PropertiesPanel({
             type="text"
             value={element.styles.width || ''}
             onChange={(e) => updateStyle('width', e.target.value)}
-            className="w-full bg-gray-800 text-white px-3 py-2 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            className="w-full bg-gray-800 text-white px-3 py-2 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
             placeholder="auto or 100% or 200px"
           />
         </div>
@@ -279,7 +279,7 @@ function PropertiesPanel({
             type="text"
             value={element.styles.height || ''}
             onChange={(e) => updateStyle('height', e.target.value)}
-            className="w-full bg-gray-800 text-white px-3 py-2 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            className="w-full bg-gray-800 text-white px-3 py-2 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
             placeholder="auto or 100% or 200px"
           />
         </div>

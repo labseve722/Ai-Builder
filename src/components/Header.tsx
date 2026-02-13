@@ -1,19 +1,22 @@
 import { Sparkles, Settings, User } from 'lucide-react';
+import { useApp } from '../context/AppContext';
 
 export function Header() {
+  const { currentProject } = useApp();
+
   return (
     <header className="h-14 bg-gray-900 border-b border-gray-800 flex items-center justify-between px-6">
       <div className="flex items-center gap-3">
         <div className="flex items-center gap-2">
-          <Sparkles className="w-6 h-6 text-indigo-400" />
+          <Sparkles className="w-6 h-6 text-blue-400" />
           <span className="text-xl font-semibold text-white">AI Builder</span>
         </div>
         <div className="h-6 w-px bg-gray-700 ml-2" />
-        <span className="text-sm text-gray-400">Untitled Project</span>
+        <span className="text-sm text-gray-400">{currentProject?.name || 'Loading...'}</span>
       </div>
 
       <div className="flex items-center gap-3">
-        <button className="px-4 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium rounded-lg transition-colors">
+        <button className="px-4 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition-colors">
           Deploy
         </button>
         <div className="h-6 w-px bg-gray-700" />
